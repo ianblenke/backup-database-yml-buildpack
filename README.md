@@ -2,6 +2,8 @@
 
 First: Why?
 
+It seems that herok-buildpack-ruby tramples all over your database.yml when it applies.
+
 https://github.com/kovyrin/db-charmer/issues/54
 
 Sure, we could hack up heroku-buildpack-ruby like this:
