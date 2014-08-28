@@ -7,6 +7,6 @@ ENV_DIR=$3     # An envdir directory of the app's environment variables
 set -x
 
 if [ -f /app/config/database.yml ]; then
-  export BUILDPACK_DATABASE_YML=/app/config/database.yml.$$
-  cp -f /app/config/database.yml $BUILDPACK_DATABASE_YML
+  export BACKUP_DATABASE_YML=/app/config/database.yml.$$
+  cp -f /app/config/database.yml $BACKUP_DATABASE_YML
 fi
