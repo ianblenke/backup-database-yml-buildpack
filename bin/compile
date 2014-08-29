@@ -6,14 +6,22 @@ ENV_DIR=$3     # An envdir directory of the app's environment variables
 
 set -e
 
-if [ -f $BUILD_DIR/config/database.yml ]; then
-  PID=$$
-  BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.$PID}
-  cp -f $BUILD_DIR/config/database.yml $BUILD_DIR/config/datbase.yml.$PID
+PID=$$
+SOURCE=$BUILD_DIR/config/database.yml
+DESTINATION=${BACKUP_DATABASE_YML:-$BUILD_DIR/config/database.yml.$PID}
+TARGET=$(basename $DESTINATION)
+DESTINATION=$(dirname $DESTINATION)/$TARGET
+
+if [ -f $SOURCE ]; then
+  echo Copying $SOURCE to $DESTINATION
+  cp -f $SOURCE $DESTINATION
 fi
 
-mkdir -p BUILD_DIR/.profile.d
-echo "export BACKUP_DATABASE_YML=$BACKUP_DATABASE_YML" > $BUILD_DIR/.profile.d/backup-database-yml.sh
+BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.$PID}
+echo "Exporting BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}"
+
+mkdir -p $BUILD_DIR/.profile.d
+echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" > $BUILD_DIR/.profile.d/backup-database-yml.sh
 chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
 
 # Pass this back to the build environment
