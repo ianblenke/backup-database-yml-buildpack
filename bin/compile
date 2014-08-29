@@ -8,9 +8,8 @@ set -e
 
 PID=$$
 SOURCE=$BUILD_DIR/config/database.yml
-DESTINATION=${BACKUP_DATABASE_YML:-$BUILD_DIR/config/database.yml.$PID}
-TARGET=$(basename $DESTINATION)
-DESTINATION=$(dirname $DESTINATION)/$TARGET
+TARGET=$(basename ${BACKUP_DATABASE_YML:-$BUILD_DIR/config/database.yml.$PID})
+DESTINATION=$(dirname $BUILD_DIR)/$TARGET
 
 if [ -f $SOURCE ]; then
   echo Copying $SOURCE to $DESTINATION
