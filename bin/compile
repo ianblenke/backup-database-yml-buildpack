@@ -7,9 +7,11 @@ ENV_DIR=$3     # An envdir directory of the app's environment variables
 set -e
 
 PID=$$
-SOURCE=$BUILD_DIR/config/database.yml
-TARGET=$(basename ${BACKUP_DATABASE_YML:-$BUILD_DIR/config/database.yml.$PID})
-DESTINATION=$(dirname $BUILD_DIR)/$TARGET
+SOURCE=${BUILD_DIR}/config/database.yml
+
+RELPATH="$(echo ${BACKUP_DATABASE_YML:-${BUILD_DIR}/config/database.yml.$PID} | sed -e 's%/app/%/%g')"
+DESTINATION="${BUILD_DIR}/${RELPATH}"
+mkdir -p $(dirname ${DESTINATION})
 
 if [ -f $SOURCE ]; then
   echo Copying $SOURCE to $DESTINATION
