@@ -15,6 +15,7 @@ mkdir -p $(dirname ${DESTINATION})
 if [ -f $SOURCE ]; then
   echo Copying $SOURCE to $DESTINATION
   cp -f $SOURCE $DESTINATION
+  cp -f $SOURCE /app/config/database.yml
   BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.backup}
 
   mkdir -p $BUILD_DIR/.profile.d
