@@ -8,7 +8,7 @@ set -ex
 
 SOURCE=${BUILD_DIR}/config/database.yml
 
-RELPATH="$(echo ${BACKUP_DATABASE_YML:-${BUILD_DIR}/config/database.yml.backup} | sed -e 's%/app/%/%g')"
+RELPATH="$(echo ${BACKUP_DATABASE_YML:-${BUILD_DIR}/config/database.yml.backup} | sed -e 's%/app/%%g' -e s%${BUILD_DIR}%%g)"
 DESTINATION="${BUILD_DIR}/${RELPATH}"
 mkdir -p $(dirname ${DESTINATION})
 
