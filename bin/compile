@@ -21,10 +21,11 @@ mkdir -p $BUILD_DIR/.profile.d
 
 BACKUP_DATABASE_PROFILE=$BUILD_DIR/.profile.d/backup-database-yml.sh
 echo "set -x" > $BACKUP_DATABASE_PROFILE
-echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" > $BACKUP_DATABASE_PROFILE
-echo 'echo Copying $BACKUP_DATABASE_YML to /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
-echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
-echo "set +x" > $BACKUP_DATABASE_PROFILE
+echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" >> $BACKUP_DATABASE_PROFILE
+echo 'echo Copying $BACKUP_DATABASE_YML to /app/config/database.yml' >> $BACKUP_DATABASE_PROFILE
+echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' >> $BACKUP_DATABASE_PROFILE
+echo "set +x" >> $BACKUP_DATABASE_PROFILE
+
 chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
 
 exit 0
