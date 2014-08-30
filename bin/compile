@@ -18,12 +18,12 @@ if [ -f $SOURCE ]; then
 fi
 
 BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.backup}
-echo "Exporting BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}"
 
 mkdir -p $BUILD_DIR/.profile.d
-echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" > $BUILD_DIR/.profile.d/backup-database-yml.sh
+
+BACKUP_DATABASE_PROFILE=$BUILD_DIR/.profile.d/backup-database-yml.sh
+echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" > $BACKUP_DATABASE_PROFILE
+echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
 chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
 
-# Pass this back to the build environment
-export BACKUP_DATABASE_YML
 exit 0
