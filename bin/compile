@@ -4,7 +4,7 @@ BUILD_DIR=$1 # The app directory, usually /app. This will have the app source in
 CACHE_DIR=$2 # The contents of CACHE_DIR will be persisted between builds so we can use it to speed the builds up
 ENV_DIR=$3     # An envdir directory of the app's environment variables
 
-set -e
+set -ex
 
 SOURCE=${BUILD_DIR}/config/database.yml
 
@@ -12,21 +12,19 @@ RELPATH="$(echo ${BACKUP_DATABASE_YML:-${BUILD_DIR}/config/database.yml.backup} 
 DESTINATION="${BUILD_DIR}/${RELPATH}"
 mkdir -p $(dirname ${DESTINATION})
 
-if [ -f $SOURCE ]; then
-  echo Copying $SOURCE to $DESTINATION
-  cp -f $SOURCE $DESTINATION
-  cp -f $SOURCE /app/config/database.yml
-  BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.backup}
+echo Copying $SOURCE to $DESTINATION
+cp -f $SOURCE $DESTINATION
+cp -f $SOURCE /app/config/database.yml
+BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.backup}
 
-  mkdir -p $BUILD_DIR/.profile.d
+mkdir -p $BUILD_DIR/.profile.d
 
-  BACKUP_DATABASE_PROFILE=$BUILD_DIR/.profile.d/backup-database-yml.sh
-  echo "set -x" > $BACKUP_DATABASE_PROFILE
-  echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" > $BACKUP_DATABASE_PROFILE
-  echo 'echo Copying $BACKUP_DATABASE_YML to /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
-  echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
-  echo "set +x" > $BACKUP_DATABASE_PROFILE
-  chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
-fi
+BACKUP_DATABASE_PROFILE=$BUILD_DIR/.profile.d/backup-database-yml.sh
+echo "set -x" > $BACKUP_DATABASE_PROFILE
+echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" > $BACKUP_DATABASE_PROFILE
+echo 'echo Copying $BACKUP_DATABASE_YML to /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
+echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' > $BACKUP_DATABASE_PROFILE
+echo "set +x" > $BACKUP_DATABASE_PROFILE
+chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
 
 exit 0
