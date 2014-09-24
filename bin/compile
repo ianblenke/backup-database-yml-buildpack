@@ -13,20 +13,24 @@ DESTINATION="${BUILD_DIR}/${RELPATH}"
 
 mkdir -p $(dirname ${DESTINATION})
 
-echo Copying $SOURCE to $DESTINATION
-cp -f $SOURCE $DESTINATION
-cp -f $SOURCE /app/config/database.yml
+if [ -f $SOURCE ]; then
 
-BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.backup}
+  echo Copying $SOURCE to $DESTINATION
+  mkdir -p $(dirname $DESTINATION)
+  cp -f $SOURCE $DESTINATION
+  cp -f $SOURCE /app/config/database.yml
 
-mkdir -p $BUILD_DIR/.profile.d
+  BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML:-/app/config/database.yml.backup}
 
-BACKUP_DATABASE_PROFILE=$BUILD_DIR/.profile.d/backup-database-yml.sh
+  mkdir -p $BUILD_DIR/.profile.d
 
-echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" >> $BACKUP_DATABASE_PROFILE
-echo 'echo Copying $BACKUP_DATABASE_YML to /app/config/database.yml' >> $BACKUP_DATABASE_PROFILE
-echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' >> $BACKUP_DATABASE_PROFILE
+  BACKUP_DATABASE_PROFILE=$BUILD_DIR/.profile.d/backup-database-yml.sh
 
-chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
+  echo "export BACKUP_DATABASE_YML=${BACKUP_DATABASE_YML}" >> $BACKUP_DATABASE_PROFILE
+  echo 'echo Copying $BACKUP_DATABASE_YML to /app/config/database.yml' >> $BACKUP_DATABASE_PROFILE
+  echo 'cp -f $BACKUP_DATABASE_YML /app/config/database.yml' >> $BACKUP_DATABASE_PROFILE
+
+  chmod 755 $BUILD_DIR/.profile.d/backup-database-yml.sh
+fi
 
 exit 0
